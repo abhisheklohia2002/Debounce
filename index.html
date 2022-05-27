@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+  <style>
+     *{
+         margin: 0;
+         padding: 0;
+     }
+      div{
+       position: relative;
+       left: 0vw;
+      }
+      #max{
+        box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+        opacity: 0.8;
+          position: relative;
+          left: 20vw;
+      }
+      #query{
+          width: 400px;
+          height: 40px;
+          background-color: azure;
+          font-size: 18px;
+          opacity: 0.8;
+          box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+      }
+      #div{
+        box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+      }
+      #movie{
+        box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+         position: relative;
+         right: 80vw;
+       height: 200px;
+    width: 400px;
+    border: 2px solid black;
+    border-top:  none;
+    border-left: none;
+    border-right: none;
+    border-bottom: none;
+    /* margin: auto; */
+    overflow: scroll;
+      }
+     
+      #p1:hover{
+        text-decoration: underline;
+        cursor: pointer;
+      }
+    section{
+        margin-top: 5vw;
+text-align: center;
+
+         
+          height: 30vw;
+          width: 40vw;
+      }
+      section:hover{
+        cursor: pointer;
+  
+      }
+      .flex{
+
+          display: flex;
+          height: 900px;
+  
+          background: url("https://assets.nflxext.com/ffe/siteui/vlv3/970e664f-2df4-47ce-b4fa-446082f5abc1/ccc3a1f7-2180-4f51-aa75-f9e9196c478b/IN-en-20220523-popsignuptwoweeks-perspective_alpha_website_large.jpg");
+      }
+      p{
+          margin-bottom: 1vw;
+          color: rgb(215, 215, 182);
+          font-size: 18px;
+          font-family: Arial, Helvetica, sans-serif;
+      }
+      p:hover{
+          cursor: pointer;
+          color: rgb(244, 140, 140);
+      }
+    
+        #img {
+    margin: 0%;
+    width: 390px;
+    height: 339px;
+}
+   
+.font{
+    font-size: 25px;
+    font-family: Arial, Helvetica, sans-serif;
+    color: rgb(182 175 135);
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+   
+  </style>
+</head>
+<body>
+    <div class="flex">
+    <section> <div id="append"></div></section>
+   
+    <div id="max" style="margin-top: 25px;">
+        
+        <input type="text" oninput="debounceFunction(main,1000)" id="query">
+        <div id="movie"></div>
+
+        </div>
+    </div>
+</body>
+</html>
+
+
+<script>
+ 
+
+
+let id;
+let movie_details = document.getElementById("query").value;
+
+let movie_info = document.getElementById("movie");
+  async function searchMovie(value){
+
+   
+try
+{
+    var data1 = "d806bd70"
+    let url = `http://www.omdbapi.com/?s=${value}&apikey=${data1}`;
+let res = await fetch(url);
+let data = await res.json();
+console.log(data);
+return data.Search;
+
+}
+catch(error){
+    console.log("error",error);
+
+}
+
+}
+
+function append(movie){
+movie_info.innerHTML = null;
+
+    if(movie === undefined){
+        return false;
+
+    }
+    console.log("movie:",movie)
+    movie.forEach(function(elem){
+        let  p = document.createElement("p");
+        p.setAttribute("id","p1")
+        p.innerText = elem.Title;
+        var x = elem.Title
+        p.addEventListener("click",function(x){
+           
+            movieshow(elem.Title);
+
+
+        })
+        movie_info.append(p);
+
+
+    })
+}
+
+
+async function main(){
+    let movie_details = document.getElementById("query").value;
+    let response = searchMovie(movie_details);
+
+    let data = await response;
+
+    console.log("data",data);
+    append(data);
+
+
+
+}
+
+//
+
+function debounceFunction(func , delay){
+
+
+
+if(id){
+    clearTimeout(id);
+
+}
+ id = setTimeout(function(){
+    func();
+
+},delay);
+
+
+}
+
+
+async function movieshow(value){
+    console.log("value",value)
+try{
+    var data1 = "2ddcb06c"
+    let movie_details = document.getElementById("query").value;
+    var url = `http://www.omdbapi.com/?t=${value}&apikey=${data1}`;
+    let res = await fetch(url);
+    let data = res.json();
+   
+    console.log("data",data)
+showposter(data)
+   
+
+
+}
+  
+catch(error){
+    console.log(error)
+}
+async function showposter(data){
+    let movie_details = document.getElementById("query").value;
+    let response = data;
+    let output = await response;
+    var arr = [];
+arr.push(output)
+   watchposter(arr)
+
+}
+ 
+
+function watchposter(arr){
+    console.log("output",arr)
+;
+arr.forEach(function(elem){
+    document.querySelector("section").innerHTML = null
+    var div = document.createElement("div");
+    div.setAttribute("id","div");
+
+    var img = document.createElement("img");
+    img.setAttribute("id","img")
+    img.src = elem.Poster;
+    var p1 = document.createElement("p");
+    p1.setAttribute("class","font");
+
+    p1.innerText ="Released:"+ elem.Released;
+    var p2 = document.createElement("p");
+    p2.setAttribute("class","font");
+
+    p2.innerText ="ImdRating:"+ elem.imdbRating;
+    var p3 = document.createElement("p");
+    p3.setAttribute("class","font");
+
+    p3.innerText ="Year:"+ elem.Year;
+    var p4 = document.createElement("p");
+    p4.setAttribute("class","font");
+
+    p4.innerText ="Cast:"+ elem.Actors;
+
+
+    div.append(img,p1,p2,p3,p4)
+    document.querySelector("section").append(div);
+
+    
+
+})
+}
+
+
+
+}
+</script>
